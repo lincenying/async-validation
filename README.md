@@ -96,6 +96,44 @@ export default {
 }
 ```
 
+### TuNiao-UI
+
+```html
+<TnForm ref="formRef" :model="formData" :rules="formRules" label-width="140">
+    <TnFormItem label="用户名" prop="username">
+        <TnInput v-model="formData.username" size="sm" />
+    </TnFormItem>
+    <TnFormItem label="密码" prop="password">
+        <TnInput v-model="formData.password" size="sm" type="password" />
+    </TnFormItem>
+</TnForm>
+```
+```ts
+import type { FormItemRule, FormRules, TnFormInstance } from '@tuniao/tnui-vue3-uniapp'
+import rules from '@lincy/async-validation'
+
+const formRef = ref<TnFormInstance>()
+
+// 表单数据
+const formData = reactive({
+    username: '',
+    password: '',
+})
+
+// 规则
+const formRules: FormRules = {
+    username: [
+        { required: true, message: '请输入用户名', trigger: ['change', 'blur'] },
+        {
+            pattern: /^[\w-]{4,16}$/,
+            message: '请输入4-16位英文、数字、下划线、横线',
+            trigger: ['change', 'blur'],
+        },
+    ],
+    password: rules.string('密码', 16, 6) as FormItemRule[],
+}
+```
+
 License
 
 MIT
