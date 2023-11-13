@@ -33,6 +33,7 @@
     "dist"
   ],
   "scripts": {
+    "postinstall": "sh simple-git-hooks.sh",
     "build": "rollup -c",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build",
@@ -60,9 +61,11 @@
     "bumpp": "^9.2.0",
     "eslint": "^8.53.0",
     "esno": "^4.0.0",
+    "lint-staged": "^15.1.0",
     "rollup": "^4.4.0",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-esbuild": "^6.1.0",
+    "simple-git-hooks": "^2.9.0",
     "simple-open-url": "^3.0.1",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
@@ -81,5 +84,13 @@
         "prettier"
       ]
     }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix"
+    ]
   }
 }
