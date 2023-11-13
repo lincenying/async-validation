@@ -16,4 +16,4 @@ export type Obj = Record<string, any>
  */
 export type ObjT<T> = Record<string, T>
 
-export type AnyFn = (...args: any[]) => any;
+export type AnyFn = (...args: any[]) => any

@@ -1,5 +1,5 @@
-import { isEmpty, isInt, isNumber } from '@lincy/utils';
-import { AnyFn } from './types';
+import { isEmpty, isInt, isNumber } from '@lincy/utils'
+import type { AnyFn } from './types'
 
 export interface RulesType {
     required?: boolean
@@ -27,30 +27,31 @@ class Rules {
             {
                 required,
                 type: 'string',
-                message: '请输入' + text,
-                trigger
-            }
+                message: `请输入${text}`,
+                trigger,
+            },
         ]
         if (isInt(max) || isInt(min)) {
             rules.push({
                 required,
                 validator: (rule, value, callback) => {
-                    if (!required && isEmpty(value)) {
+                    if (!required && isEmpty(value))
                         return callback()
-                    }
-                    if (max && isInt(max) && value.length > max) {
-                        return callback(new Error(text + '长度不能大于' + max))
-                    }
-                    if (min && isInt(min) && value.length < min) {
-                        return callback(new Error(text + '长度不能小于' + min))
-                    }
+
+                    if (max && isInt(max) && value.length > max)
+                        return callback(new Error(`${text}长度不能大于${max}`))
+
+                    if (min && isInt(min) && value.length < min)
+                        return callback(new Error(`${text}长度不能小于${min}`))
+
                     callback()
                 },
-                trigger
+                trigger,
             })
         }
         return rules
     }
+
     /**
      * 选择类型, 如 单选框, 复选框, 下拉框 之类的
      * @param text 字段名
@@ -60,14 +61,15 @@ class Rules {
     select(text: string, multiple: boolean) {
         const rules: RulesType = {
             required: true,
-            message: '请选择' + text,
-            trigger: 'change'
+            message: `请选择${text}`,
+            trigger: 'change',
         }
-        if (multiple) {
+        if (multiple)
             rules.type = 'array'
-        }
+
         return [rules]
     }
+
     /**
      * Url网址
      * @param text 字段名
@@ -78,13 +80,14 @@ class Rules {
         const rules: RulesType[] = [
             {
                 required,
-                message: text + '格式不正确',
+                message: `${text}格式不正确`,
                 type: 'url',
-                trigger: 'blur'
-            }
+                trigger: 'blur',
+            },
         ]
         return rules
     }
+
     /**
      * 整数(包含0), 通过正则匹配, 可限制最大值最小值
      * @param text 字段名
@@ -99,41 +102,41 @@ class Rules {
         rules.push({
             required,
             validator: (rule, value, callback) => {
-                if (!required && isEmpty(value)) {
+                if (!required && isEmpty(value))
                     return callback()
-                }
-                if (required && isEmpty(value)) {
-                    return callback(new Error(text + '不能为空'))
-                }
+
+                if (required && isEmpty(value))
+                    return callback(new Error(`${text}不能为空`))
+
                 const preg = /^(([0]{1})|([1-9][0-9]*))$/
-                if (!preg.test(value)) {
-                    return callback(new Error(text + '只能是整数'))
-                }
+                if (!preg.test(value))
+                    return callback(new Error(`${text}只能是整数`))
 
                 callback()
             },
-            trigger
+            trigger,
         })
         if (isInt(max) || isInt(min)) {
             rules.push({
                 required,
                 validator: (rule, value, callback) => {
-                    if (!required && isEmpty(value)) {
+                    if (!required && isEmpty(value))
                         return callback()
-                    }
-                    if (max && isInt(max) && Number(value) > max) {
-                        return callback(new Error(text + '不能大于' + max))
-                    }
-                    if (min && isInt(min) && Number(value) < min) {
-                        return callback(new Error(text + '不能小于' + min))
-                    }
+
+                    if (max && isInt(max) && Number(value) > max)
+                        return callback(new Error(`${text}不能大于${max}`))
+
+                    if (min && isInt(min) && Number(value) < min)
+                        return callback(new Error(`${text}不能小于${min}`))
+
                     callback()
                 },
-                trigger
+                trigger,
             })
         }
         return rules
     }
+
     /**
      * 金额类型, 通过正则验证, 支持小数点后两位, 且可以限制最大值和最小值
      * @param text 字段名
@@ -149,41 +152,41 @@ class Rules {
         rules.push({
             required,
             validator: (rule, value, callback) => {
-                if (!required && isEmpty(value)) {
+                if (!required && isEmpty(value))
                     return callback()
-                }
-                if (required && isEmpty(value)) {
-                    return callback(new Error(text + '不能为空'))
-                }
+
+                if (required && isEmpty(value))
+                    return callback(new Error(`${text}不能为空`))
+
                 const preg = /^(([0]{1})|([1-9]\d*)|([1-9]\d*)(\.\d{1,2})|(0\.0[1-9]{1})|(0\.[1-9][0-9]{0,1}))$/
-                if (!preg.test(value)) {
-                    return callback(new Error(text + '只能是数字和小数点后面两位'))
-                }
+                if (!preg.test(value))
+                    return callback(new Error(`${text}只能是数字和小数点后面两位`))
 
                 callback()
             },
-            trigger
+            trigger,
         })
         if (isNumber(max) || isNumber(min)) {
             rules.push({
                 required,
                 validator: (rule, value, callback) => {
-                    if (!required && isEmpty(value)) {
+                    if (!required && isEmpty(value))
                         return callback()
-                    }
-                    if (isNumber(max) && Number(value) > max) {
-                        return callback(new Error(text + '不能大于' + max))
-                    }
-                    if (isNumber(min) && Number(value) < min) {
-                        return callback(new Error(text + '不能小于' + min))
-                    }
+
+                    if (isNumber(max) && Number(value) > max)
+                        return callback(new Error(`${text}不能大于${max}`))
+
+                    if (isNumber(min) && Number(value) < min)
+                        return callback(new Error(`${text}不能小于${min}`))
+
                     callback()
                 },
-                trigger
+                trigger,
             })
         }
         return rules
     }
+
     /**
      * 国内通用手机号码
      * @param text 字段名
@@ -194,18 +197,19 @@ class Rules {
         const rules: RulesType[] = [
             {
                 required,
-                message: '请输入' + text,
-                trigger: 'blur'
+                message: `请输入${text}`,
+                trigger: 'blur',
             },
             {
                 type: 'string',
                 pattern: /^[1][3456789][0-9]{9}$/,
-                message: text + '格式不正确',
-                trigger: 'blur'
-            }
+                message: `${text}格式不正确`,
+                trigger: 'blur',
+            },
         ]
         return rules
     }
+
     /**
      * 国内通用银行卡
      * @param text 字段名
@@ -216,18 +220,19 @@ class Rules {
         const rules: RulesType[] = [
             {
                 required,
-                message: '请输入' + text,
-                trigger: 'blur'
+                message: `请输入${text}`,
+                trigger: 'blur',
             },
             {
                 type: 'string',
                 pattern: /^(\d{16}|\d{19})$/,
-                message: text + '格式不正确',
-                trigger: 'blur'
-            }
+                message: `${text}格式不正确`,
+                trigger: 'blur',
+            },
         ]
         return rules
     }
+
     /**
      * 邮箱验证
      * @param text 字段名
@@ -238,18 +243,19 @@ class Rules {
         const rules: RulesType[] = [
             {
                 required,
-                message: text + '不能为空',
-                trigger: 'blur'
+                message: `${text}不能为空`,
+                trigger: 'blur',
             },
             {
                 type: 'string',
                 pattern: /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-                message: text + '格式不正确',
-                trigger: 'blur'
-            }
+                message: `${text}格式不正确`,
+                trigger: 'blur',
+            },
         ]
         return rules
     }
+
     /**
      * QQ号
      * @param text 字段名
@@ -260,18 +266,19 @@ class Rules {
         const rules: RulesType[] = [
             {
                 required,
-                message: text + '不能为空',
-                trigger: 'blur'
+                message: `${text}不能为空`,
+                trigger: 'blur',
             },
             {
                 type: 'string',
                 pattern: /^[1-9][0-9]{4,10}$/,
-                message: text + '格式不正确',
-                trigger: 'blur'
-            }
+                message: `${text}格式不正确`,
+                trigger: 'blur',
+            },
         ]
         return rules
     }
+
     /**
      * 身份证号码验证
      * @param text 字段名
@@ -284,12 +291,12 @@ class Rules {
         rules.push({
             required,
             validator: (rule, value, callback) => {
-                if (!required && isEmpty(value)) {
+                if (!required && isEmpty(value))
                     return callback()
-                }
-                if (required && isEmpty(value)) {
-                    return callback(new Error(text + '不能为空'))
-                }
+
+                if (required && isEmpty(value))
+                    return callback(new Error(`${text}不能为空`))
+
                 const city: CityType = {
                     11: '北京',
                     12: '天津',
@@ -325,22 +332,24 @@ class Rules {
                     71: '台湾',
                     81: '香港',
                     82: '澳门',
-                    91: '国外 '
+                    91: '国外 ',
                 }
                 let tip = ''
                 const twoStr: number = value.substr(0, 2) as number as keyof CityType
                 if (!value || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)) {
                     tip = '格式错误'
-                } else if (!city[twoStr]) {
+                }
+                else if (!city[twoStr]) {
                     tip = '地址编码错误'
-                } else {
-                    //18位身份证需要验证最后一位校验位
-                    if (value.length == 18) {
+                }
+                else {
+                    // 18位身份证需要验证最后一位校验位
+                    if (value.length === 18) {
                         const arr_value = value.split('')
-                        //∑(ai×Wi)(mod 11)
-                        //加权因子
+                        // ∑(ai×Wi)(mod 11)
+                        // 加权因子
                         const factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
-                        //校验位
+                        // 校验位
                         const parity = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2]
                         let sum = 0
                         let ai = 0
@@ -350,17 +359,16 @@ class Rules {
                             wi = factor[i]
                             sum += ai * wi
                         }
-                        if (parity[sum % 11] != arr_value[17]) {
+                        if (parity[sum % 11] !== arr_value[17])
                             tip = '校验位错误'
-                        }
                     }
                 }
-                if (tip) {
+                if (tip)
                     return callback(new Error(text + tip))
-                }
+
                 callback()
             },
-            trigger: 'blur'
+            trigger: 'blur',
         })
         return rules
     }
