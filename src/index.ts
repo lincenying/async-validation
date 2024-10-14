@@ -12,6 +12,27 @@ export interface RulesType {
 
 type CityType = Record<number, string>
 
+function isNumberWithPrecision(str: string | number, precision?: number) {
+    if (typeof str === 'number')
+        str = String(str)
+
+    // 检查是否为有效的数字字符串（包括正负号、整数部分和小数部分）
+    const numberRegex = /^-?\d+(\.\d+)?$/
+
+    if (!numberRegex.test(str))
+        return false // 如果不是有效的数字格式，则返回false
+
+    // 检查是否有小数点，并且小数点后的位数不超过指定的precision
+    if (precision) {
+        const decimalPart = str.split('.')[1]
+        if (decimalPart && decimalPart.length > precision)
+            return false
+    }
+
+    // 如果通过了上面的所有检查，那么这个字符串就是一个合法的数字
+    return true
+}
+
 class Rules {
     /**
      * 字符串类型, 即一般文本框
@@ -111,6 +132,55 @@ class Rules {
                 const preg = /^(([0]{1})|([1-9][0-9]*))$/
                 if (!preg.test(value))
                     return callback(new Error(`${text}只能是整数`))
+
+                callback()
+            },
+            trigger,
+        })
+        if (isInt(max) || isInt(min)) {
+            rules.push({
+                required,
+                validator: (rule, value, callback) => {
+                    if (!required && isEmpty(value))
+                        return callback()
+
+                    if (max && isInt(max) && Number(value) > max)
+                        return callback(new Error(`${text}不能大于${max}`))
+
+                    if (min && isInt(min) && Number(value) < min)
+                        return callback(new Error(`${text}不能小于${min}`))
+
+                    callback()
+                },
+                trigger,
+            })
+        }
+        return rules
+    }
+
+    /**
+     * 整数或者浮点数(包含0), 通过正则匹配, 可限制最大值最小值
+     * @param text 字段名
+     * @param precision 小数点位数
+     * @param max 最大值
+     * @param min 最小值
+     * @param trigger 动作: change, blur
+     * @param required 是否能为空
+     * @returns Rules
+     */
+    integer_float(text: string, precision?: number, max?: number, min?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
+        const rules: RulesType[] = []
+        rules.push({
+            required,
+            validator: (rule, value, callback) => {
+                if (!required && isEmpty(value))
+                    return callback()
+
+                if (required && isEmpty(value))
+                    return callback(new Error(`${text}不能为空`))
+
+                if (!isNumberWithPrecision(value, precision))
+                    return callback(new Error(`${text}只能是整数或者小数${precision ? `(小数后${precision}位)` : ''}`))
 
                 callback()
             },
