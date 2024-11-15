@@ -2,7 +2,6 @@
 
 async-validator 验证规则, 凡使用async-validator的UI库都可用
 
-
 ##### install
 
 ```bash

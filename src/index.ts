@@ -1,5 +1,5 @@
-import { isEmpty, isInt, isNumber } from '@lincy/utils'
 import type { AnyFn } from './types'
+import { isEmpty, isInt, isNumber } from '@lincy/utils'
 
 export interface RulesType {
     required?: boolean
@@ -17,6 +17,7 @@ function isNumberWithPrecision(str: string | number, precision?: number) {
         str = String(str)
 
     // 检查是否为有效的数字字符串（包括正负号、整数部分和小数部分）
+    // eslint-disable-next-line regexp/no-unused-capturing-group
     const numberRegex = /^-?\d+(\.\d+)?$/
 
     if (!numberRegex.test(str))
@@ -55,7 +56,7 @@ class Rules {
         if (isInt(max) || isInt(min)) {
             rules.push({
                 required,
-                validator: (rule, value, callback) => {
+                validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
@@ -76,10 +77,10 @@ class Rules {
     /**
      * 选择类型, 如 单选框, 复选框, 下拉框 之类的
      * @param text 字段名
-     * @param multiple 是否为数组
+     * @param multiple 是否为数组 @default false
      * @returns Rules
      */
-    select(text: string, multiple: boolean) {
+    select(text: string, multiple: boolean = false) {
         const rules: RulesType = {
             required: true,
             message: `请选择${text}`,
@@ -122,14 +123,14 @@ class Rules {
         const rules: RulesType[] = []
         rules.push({
             required,
-            validator: (rule, value, callback) => {
+            validator: (_rule, value, callback) => {
                 if (!required && isEmpty(value))
                     return callback()
 
                 if (required && isEmpty(value))
                     return callback(new Error(`${text}不能为空`))
 
-                const preg = /^(([0]{1})|([1-9][0-9]*))$/
+                const preg = /^0|[1-9]\d*$/
                 if (!preg.test(value))
                     return callback(new Error(`${text}只能是整数`))
 
@@ -140,7 +141,7 @@ class Rules {
         if (isInt(max) || isInt(min)) {
             rules.push({
                 required,
-                validator: (rule, value, callback) => {
+                validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
@@ -172,7 +173,7 @@ class Rules {
         const rules: RulesType[] = []
         rules.push({
             required,
-            validator: (rule, value, callback) => {
+            validator: (_rule, value, callback) => {
                 if (!required && isEmpty(value))
                     return callback()
 
@@ -189,7 +190,7 @@ class Rules {
         if (isInt(max) || isInt(min)) {
             rules.push({
                 required,
-                validator: (rule, value, callback) => {
+                validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
@@ -221,14 +222,15 @@ class Rules {
         const rules: RulesType[] = []
         rules.push({
             required,
-            validator: (rule, value, callback) => {
+            validator: (_rule, value, callback) => {
                 if (!required && isEmpty(value))
                     return callback()
 
                 if (required && isEmpty(value))
                     return callback(new Error(`${text}不能为空`))
 
-                const preg = /^(([0]{1})|([1-9]\d*)|([1-9]\d*)(\.\d{1,2})|(0\.0[1-9]{1})|(0\.[1-9][0-9]{0,1}))$/
+                // eslint-disable-next-line regexp/no-unused-capturing-group
+                const preg = /^((0)|([1-9]\d*)|([1-9]\d*)(\.\d{1,2})|(0\.0[1-9])|(0\.[1-9]\d?))$/
                 if (!preg.test(value))
                     return callback(new Error(`${text}只能是数字和小数点后面两位`))
 
@@ -236,10 +238,10 @@ class Rules {
             },
             trigger,
         })
-        if (isNumber(max) || isNumber(min)) {
+        if ((max && isNumber(max)) || (min && isNumber(min))) {
             rules.push({
                 required,
-                validator: (rule, value, callback) => {
+                validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
@@ -272,7 +274,7 @@ class Rules {
             },
             {
                 type: 'string',
-                pattern: /^[1][3456789][0-9]{9}$/,
+                pattern: /^1[3-9]\d{9}$/,
                 message: `${text}格式不正确`,
                 trigger: 'blur',
             },
@@ -318,7 +320,7 @@ class Rules {
             },
             {
                 type: 'string',
-                pattern: /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+                pattern: /^([\w.-])+@(([a-z0-9-])+\.)+[a-z0-9]{2,4}$/i,
                 message: `${text}格式不正确`,
                 trigger: 'blur',
             },
@@ -341,7 +343,7 @@ class Rules {
             },
             {
                 type: 'string',
-                pattern: /^[1-9][0-9]{4,10}$/,
+                pattern: /^[1-9]\d{4,10}$/,
                 message: `${text}格式不正确`,
                 trigger: 'blur',
             },
@@ -360,7 +362,7 @@ class Rules {
         const rules: RulesType[] = []
         rules.push({
             required,
-            validator: (rule, value, callback) => {
+            validator: (_rule, value, callback) => {
                 if (!required && isEmpty(value))
                     return callback()
 
@@ -406,6 +408,7 @@ class Rules {
                 }
                 let tip = ''
                 const twoStr: number = value.substr(0, 2) as number as keyof CityType
+                // eslint-disable-next-line regexp/no-unused-capturing-group
                 if (!value || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)) {
                     tip = '格式错误'
                 }

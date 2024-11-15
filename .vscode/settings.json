@@ -1,16 +1,10 @@
 {
   "prettier.enable": true,
-  "files.associations": {
-    "*.css": "postcss"
-  },
   /**
    * 解决 unocss @apply 警告问题
    * @see https://github.com/tailwindlabs/tailwindcss/discussions/5258#discussioncomment-1979394
    */
   "scss.lint.unknownAtRules": "ignore",
-
-  // Enable the flat config support
-  "eslint.experimental.useFlatConfig": true,
 
   // Disable the default formatter
   "editor.formatOnSave": false,
