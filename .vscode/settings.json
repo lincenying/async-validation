@@ -50,5 +50,6 @@
     "json",
     "jsonc",
     "yaml"
-  ]
+  ],
+  "svn.ignoreMissingSvnWarning": true
 }

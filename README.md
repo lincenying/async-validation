@@ -26,7 +26,7 @@ pnpm add @lincy/async-validation -D
 ```
 
 ```javascript
-import rules from 'element-ui-validation'
+import rules from '@lincy/async-validation'
 
 export default {
     data() {
