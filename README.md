@@ -72,7 +72,7 @@ export default {
                     ],
 
                     // 整数或浮点数
-                    integer_float: rules.integer_float('人数', 100, 10), // 10-100
+                    integer_float: rules.integer_float('人数', 2, 100, 10), // 10-100
 
                     // 金额规则 rules.money('提示文字', 最大值, 最小值)
                     money: rules.money('金额', 0.8, 0),
