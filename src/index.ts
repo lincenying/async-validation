@@ -111,7 +111,7 @@ class Rules {
     }
 
     /**
-     * 整数(包含0), 通过正则匹配, 可限制最大值最小值
+     * 整数(包含0, 负整数), 通过正则匹配, 可限制最大值最小值
      * @param text 字段名
      * @param max 最大值
      * @param min 最小值
@@ -130,9 +130,16 @@ class Rules {
                 if (required && isEmpty(value))
                     return callback(new Error(`${text}不能为空`))
 
-                const preg = /^0|[1-9]\d*$/
-                if (!preg.test(value))
-                    return callback(new Error(`${text}只能是整数`))
+                if (typeof value === 'number') {
+                    if (!isInt(value)) {
+                        return callback(new Error(`${text}只能是整数`))
+                    }
+                }
+                else {
+                    const preg = /^-?\d+$/
+                    if (!preg.test(value))
+                        return callback(new Error(`${text}只能是整数`))
+                }
 
                 callback()
             },
@@ -160,7 +167,7 @@ class Rules {
     }
 
     /**
-     * 整数或者浮点数(包含0), 通过正则匹配, 可限制最大值最小值
+     * 整数或者浮点数(包含0和负数), 通过正则匹配, 可限制最大值最小值
      * @param text 字段名
      * @param precision 小数点位数
      * @param max 最大值
