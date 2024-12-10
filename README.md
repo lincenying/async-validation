@@ -51,9 +51,14 @@ export default {
                     string2: rules.string('密码', undefined, 6), // 最短6位
                     string3: rules.string('密码', 16, 6), // 6-16位
 
+                    // 字母和数字
+                    pass1: rules.letter_number('密码1'),
+                    pass2: rules.letter_number('密码2', undefined, 6), // 最短6位
+                    pass3: rules.letter_number('密码3', 16, 6), // 6-16位
+
                     // 下拉框, 单选框, 复选框规则
                     select1: rules.select('城市'),
-                    select2: rules.select('城市', true), // 多选
+                    select2: rules.select('城市', true), // 多选, 验证值必须为数组
 
                     // 网址规则
                     url: rules.url('网址'),

@@ -75,6 +75,50 @@ class Rules {
     }
 
     /**
+     * 只允许字母或数字
+     * @param text 字段名
+     * @param maxLength 最大长度
+     * @param minLength 最小长度
+     * @param trigger 动作: change, blur
+     * @param required 是否能为空
+     * @returns Rules
+     */
+    letter_number(text: string, maxLength?: number, minLength?: number, trigger: string[] | string = ['change', 'blur'], required: boolean = true) {
+        const rules: RulesType[] = [
+            {
+                required,
+                message: `请输入${text}`,
+                trigger,
+            },
+        ]
+
+        if (isInt(maxLength) || isInt(minLength)) {
+            rules.push({
+                required,
+                validator: (_rule, value, callback) => {
+                    if (!required && isEmpty(value))
+                        return callback()
+
+                    const preg = /^[0-9a-z]*$/i
+                    if (!preg.test(value))
+                        return callback(new Error(`${text}只能是字母或数字`))
+
+                    if (maxLength && isInt(maxLength) && value.length > maxLength)
+                        return callback(new Error(`${text}长度不能大于${maxLength}`))
+
+                    if (minLength && isInt(minLength) && value.length < minLength)
+                        return callback(new Error(`${text}长度不能小于${minLength}`))
+
+                    callback()
+                },
+                trigger,
+            })
+        }
+
+        return rules
+    }
+
+    /**
      * 选择类型, 如 单选框, 复选框, 下拉框 之类的
      * @param text 字段名
      * @param multiple 是否为数组 @default false
