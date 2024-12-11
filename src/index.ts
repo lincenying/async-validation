@@ -38,13 +38,13 @@ class Rules {
     /**
      * 字符串类型, 即一般文本框
      * @param text 字段名
-     * @param max 最大长度
-     * @param min 最小长度
+     * @param maxLength 最大长度
+     * @param minLength 最小长度
      * @param trigger 动作: change, blur
      * @param required 是否能为空
      * @returns Rules
      */
-    string(text: string, max?: number, min?: number, trigger: string[] | string = ['change', 'blur'], required: boolean = true) {
+    string(text: string, maxLength?: number, minLength?: number, trigger: string[] | string = ['change', 'blur'], required: boolean = true) {
         const rules: RulesType[] = [
             {
                 required,
@@ -53,18 +53,18 @@ class Rules {
                 trigger,
             },
         ]
-        if (isInt(max) || isInt(min)) {
+        if (isInt(maxLength) || isInt(minLength)) {
             rules.push({
                 required,
                 validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
-                    if (max && isInt(max) && value.length > max)
-                        return callback(new Error(`${text}长度不能大于${max}`))
+                    if (maxLength && isInt(maxLength) && value.length > maxLength)
+                        return callback(new Error(`${text}长度不能大于${maxLength}`))
 
-                    if (min && isInt(min) && value.length < min)
-                        return callback(new Error(`${text}长度不能小于${min}`))
+                    if (minLength && isInt(minLength) && value.length < minLength)
+                        return callback(new Error(`${text}长度不能小于${minLength}`))
 
                     callback()
                 },
@@ -157,13 +157,13 @@ class Rules {
     /**
      * 整数(包含0, 负整数), 通过正则匹配, 可限制最大值最小值
      * @param text 字段名
-     * @param max 最大值
-     * @param min 最小值
+     * @param maximum 最大值
+     * @param minimum 最小值
      * @param trigger 动作: change, blur
      * @param required 是否能为空
      * @returns Rules
      */
-    integer(text: string, max?: number, min?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
+    integer(text: string, maximum?: number, minimum?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
         const rules: RulesType[] = []
         rules.push({
             required,
@@ -189,18 +189,18 @@ class Rules {
             },
             trigger,
         })
-        if (isInt(max) || isInt(min)) {
+        if (isInt(maximum) || isInt(minimum)) {
             rules.push({
                 required,
                 validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
-                    if (max && isInt(max) && Number(value) > max)
-                        return callback(new Error(`${text}不能大于${max}`))
+                    if (maximum && isInt(maximum) && Number(value) > maximum)
+                        return callback(new Error(`${text}不能大于${maximum}`))
 
-                    if (min && isInt(min) && Number(value) < min)
-                        return callback(new Error(`${text}不能小于${min}`))
+                    if (minimum && isInt(minimum) && Number(value) < minimum)
+                        return callback(new Error(`${text}不能小于${minimum}`))
 
                     callback()
                 },
@@ -214,13 +214,13 @@ class Rules {
      * 整数或者浮点数(包含0和负数), 通过正则匹配, 可限制最大值最小值
      * @param text 字段名
      * @param precision 小数点位数
-     * @param max 最大值
-     * @param min 最小值
+     * @param maximum 最大值
+     * @param minimum 最小值
      * @param trigger 动作: change, blur
      * @param required 是否能为空
      * @returns Rules
      */
-    integer_float(text: string, precision?: number, max?: number, min?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
+    integer_float(text: string, precision?: number, maximum?: number, minimum?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
         const rules: RulesType[] = []
         rules.push({
             required,
@@ -238,18 +238,18 @@ class Rules {
             },
             trigger,
         })
-        if (isInt(max) || isInt(min)) {
+        if (isInt(maximum) || isInt(minimum)) {
             rules.push({
                 required,
                 validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
-                    if (max && isInt(max) && Number(value) > max)
-                        return callback(new Error(`${text}不能大于${max}`))
+                    if (maximum && isInt(maximum) && Number(value) > maximum)
+                        return callback(new Error(`${text}不能大于${maximum}`))
 
-                    if (min && isInt(min) && Number(value) < min)
-                        return callback(new Error(`${text}不能小于${min}`))
+                    if (minimum && isInt(minimum) && Number(value) < minimum)
+                        return callback(new Error(`${text}不能小于${minimum}`))
 
                     callback()
                 },
@@ -262,13 +262,13 @@ class Rules {
     /**
      * 金额类型, 通过正则验证, 支持小数点后两位, 且可以限制最大值和最小值
      * @param text 字段名
-     * @param max 最大值
-     * @param min 最小值
+     * @param maximum 最大值
+     * @param minimum 最小值
      * @param trigger 动作: change, blur
      * @param required 是否能为空
      * @returns Rules
      */
-    money(text: string, max?: number, min?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
+    money(text: string, maximum?: number, minimum?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
         text = text || '金额'
         const rules: RulesType[] = []
         rules.push({
@@ -289,18 +289,18 @@ class Rules {
             },
             trigger,
         })
-        if ((max && isNumber(max)) || (min && isNumber(min))) {
+        if ((maximum && isNumber(maximum)) || (minimum && isNumber(minimum))) {
             rules.push({
                 required,
                 validator: (_rule, value, callback) => {
                     if (!required && isEmpty(value))
                         return callback()
 
-                    if (isNumber(max) && Number(value) > max)
-                        return callback(new Error(`${text}不能大于${max}`))
+                    if (isNumber(maximum) && Number(value) > maximum)
+                        return callback(new Error(`${text}不能大于${maximum}`))
 
-                    if (isNumber(min) && Number(value) < min)
-                        return callback(new Error(`${text}不能小于${min}`))
+                    if (isNumber(minimum) && Number(value) < minimum)
+                        return callback(new Error(`${text}不能小于${minimum}`))
 
                     callback()
                 },

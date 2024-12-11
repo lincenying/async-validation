@@ -22,6 +22,7 @@ const plugins = [
     commonjs(),
     esbuild({
         target: 'node8',
+        charset: 'utf8',
     }),
 ]
 
