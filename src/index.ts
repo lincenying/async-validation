@@ -42,7 +42,7 @@ class Rules {
      * @param minLength 最小长度
      * @param trigger 动作: change, blur
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     string(text: string, maxLength?: number, minLength?: number, trigger: string[] | string = ['change', 'blur'], required: boolean = true) {
         const rules: RulesType[] = [
@@ -81,7 +81,7 @@ class Rules {
      * @param minLength 最小长度
      * @param trigger 动作: change, blur
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     letter_number(text: string, maxLength?: number, minLength?: number, trigger: string[] | string = ['change', 'blur'], required: boolean = true) {
         const rules: RulesType[] = [
@@ -122,7 +122,7 @@ class Rules {
      * 选择类型, 如 单选框, 复选框, 下拉框 之类的
      * @param text 字段名
      * @param multiple 是否为数组 @default false
-     * @returns Rules
+     * @returns RulesType[]
      */
     select(text: string, multiple: boolean = false) {
         const rules: RulesType = {
@@ -140,7 +140,7 @@ class Rules {
      * Url网址
      * @param text 字段名
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     url(text: string, required = true) {
         const rules: RulesType[] = [
@@ -161,7 +161,7 @@ class Rules {
      * @param minimum 最小值
      * @param trigger 动作: change, blur
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     integer(text: string, maximum?: number, minimum?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
         const rules: RulesType[] = []
@@ -218,7 +218,7 @@ class Rules {
      * @param minimum 最小值
      * @param trigger 动作: change, blur
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     integer_float(text: string, precision?: number, maximum?: number, minimum?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
         const rules: RulesType[] = []
@@ -266,7 +266,7 @@ class Rules {
      * @param minimum 最小值
      * @param trigger 动作: change, blur
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     money(text: string, maximum?: number, minimum?: number, trigger: string[] | string = ['change', 'blur'], required = true) {
         text = text || '金额'
@@ -314,7 +314,7 @@ class Rules {
      * 国内通用手机号码
      * @param text 字段名
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     phone(text: string, required = true) {
         const rules: RulesType[] = [
@@ -337,7 +337,7 @@ class Rules {
      * 国内通用银行卡
      * @param text 字段名
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     bank_card(text: string, required = true) {
         const rules: RulesType[] = [
@@ -360,7 +360,7 @@ class Rules {
      * 邮箱验证
      * @param text 字段名
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     email(text: string, required = true) {
         const rules: RulesType[] = [
@@ -383,7 +383,7 @@ class Rules {
      * QQ号
      * @param text 字段名
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     qq(text: string, required = true) {
         const rules: RulesType[] = [
@@ -406,7 +406,7 @@ class Rules {
      * 身份证号码验证
      * @param text 字段名
      * @param required 是否能为空
-     * @returns Rules
+     * @returns RulesType[]
      */
     idcard(text: string, required = true) {
         text = text || '身份证号码'

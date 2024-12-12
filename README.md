@@ -10,6 +10,105 @@ yarn add @lincy/async-validation
 pnpm add @lincy/async-validation -D
 ```
 
+### string
+```ts
+function string(text: string, maxLength?: number, minLength?: number, trigger?: string[] | string, required?: boolean): RulesType[]
+```
+字符串类型, 即一般文本框
+- @param text 字段名
+- @param maxLength 最大长度
+- @param minLength 最小长度
+- @param trigger 动作: change, blur
+- @param required 是否能为空
+- @returns RulesType[]
+
+### letter_number
+```ts
+function letter_number(text: string, maxLength?: number, minLength?: number, trigger?: string[] | string, required?: boolean): RulesType[]
+```
+只允许字母或数字
+- @param text 字段名
+- @param maxLength 最大长度
+- @param minLength 最小长度
+- @param trigger 动作: change, blur
+- @param required 是否能为空
+- @returns RulesType[]
+
+### select
+```ts
+function select(text: string, multiple?: boolean): RulesType[]
+```
+选择类型, 如 单选框, 复选框, 下拉框 之类的
+- @param text 字段名
+- @param multiple 是否为数组 默认: false
+- @returns RulesType[]
+
+### url
+```ts
+function url(text: string, required?: boolean): RulesType[]
+```
+Url网址
+- @param text 字段名
+- @param required 是否能为空
+- @returns RulesType[]
+
+### integer
+```ts
+function integer(text: string, maximum?: number, minimum?: number, trigger?: string[] | string, required?: boolean): RulesType[]
+```
+整数(包含0, 负整数), 通过正则匹配, 可限制最大值最小值
+- @param text 字段名
+- @param maximum 最大值
+- @param minimum 最小值
+- @param trigger 动作: change, blur
+- @param required 是否能为空
+- @returns RulesType[]
+
+### integer_float
+```ts
+function integer_float(text: string, precision?: number, maximum?: number, minimum?: number, trigger?: string[] | string, required?: boolean): RulesType[]
+```
+整数或者浮点数(包含0和负数), 通过正则匹配, 可限制最大值最小值
+- @param text 字段名
+- @param precision 小数点位数
+- @param maximum 最大值
+- @param minimum 最小值
+- @param trigger 动作: change, blur
+- @param required 是否能为空
+- @returns RulesType[]
+
+### money
+```ts
+function money(text: string, maximum?: number, minimum?: number, trigger?: string[] | string, required?: boolean): RulesType[]
+```
+金额类型, 通过正则验证, 支持小数点后两位, 且可以限制最大值和最小值
+- @param text — 字段名
+- @param maximum — 最大值
+- @param minimum — 最小值
+- @param trigger — 动作: change, blur
+- @param required — 是否能为空
+- @returns — RulesType[]
+
+### phone
+```ts
+function phone(text: string, required?: boolean): RulesType[]
+```
+国内通用手机号码
+- @param text — 字段名
+- @param required — 是否能为空
+- @returns — RulesType[]
+
+### bank_card
+```ts
+function bank_card(text: string, required?: boolean): RulesType[]
+```
+国内通用银行卡
+- @param text — 字段名
+- @param required — 是否能为空
+- @returns — RulesType[]
+
+## 示例
+
 ```html
 <el-form :model="data.form" :rules="data.rules" ref="ref">
     <el-form-item label="地址：" label-width="120px" prop="string1">
@@ -105,7 +204,7 @@ export default {
 
 ### TuNiao-UI
 
-```html
+```vue
 <TnForm ref="formRef" :model="formData" :rules="formRules" label-width="140">
     <TnFormItem label="用户名" prop="username">
         <TnInput v-model="formData.username" size="sm" />
