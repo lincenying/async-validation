@@ -109,21 +109,76 @@ function bank_card(text: string, required?: boolean): RulesType[]
 
 ## 示例
 
+#### 组合式
 ```html
-<el-form :model="data.form" :rules="data.rules" ref="ref">
-    <el-form-item label="地址：" label-width="120px" prop="string1">
-        <el-input v-model="data.form.string1" auto-complete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="密码：" label-width="120px" prop="string2">
-        <el-input v-model="data.form.string2" auto-complete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="密码：" label-width="120px" prop="string3">
-        <el-input v-model="data.form.string3" auto-complete="off"></el-input>
-    </el-form-item>
-</el-form>
+<template>
+    <el-form :model="form" :rules="rules" ref="formRef">
+        <el-form-item label="旧密码：" label-width="120px" prop="string1">
+            <el-input v-model="form.string1" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码：" label-width="120px" prop="string2">
+            <el-input v-model="form.string2" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码：" label-width="120px" prop="string3">
+            <el-input v-model="form.string3" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script setup lang="ts">
+import rules from '@lincy/async-validation'
+
+const form = reactive({
+    string1: '',
+    string2: '',
+    string3: '',
+    int1: '',
+    int2: ''
+})
+
+const formRef = ref()
+
+const rules = {
+    string1: rules.string('旧密码'),
+    string2: [
+        ...rules.string('新密码', undefined, 6), // 最短6位
+        {
+            validator: (_rule, _value, callback) => {
+                formRef.value?.validateField('string3')
+                callback()
+            },
+        }
+    ],
+    string3: [
+        ...rules.string('确认密码', 16, 6), // 6-16位
+        {
+            validator: (_rule, value, callback) => {
+                if (form.string2 !== value) {
+                    return callback(new Error('两次密码输入不一致'))
+                }
+                callback()
+            },
+        },
+    ],
+}
+</script>
 ```
 
-```javascript
+#### 选项式
+```html
+<template>
+    <el-form :model="data.form" :rules="data.rules" ref="formRef">
+        <el-form-item label="旧密码：" label-width="120px" prop="string1">
+            <el-input v-model="data.form.string1" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码：" label-width="120px" prop="string2">
+            <el-input v-model="data.form.string2" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码：" label-width="120px" prop="string3">
+            <el-input v-model="data.form.string3" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
 import rules from '@lincy/async-validation'
 
 export default {
@@ -146,9 +201,9 @@ export default {
             data: {
                 rules: {
                     // 输入框规则 rules.string('提示文字', 最大长度, 最小长度)
-                    string1: rules.string('地址'),
-                    string2: rules.string('密码', undefined, 6), // 最短6位
-                    string3: rules.string('密码', 16, 6), // 6-16位
+                    string1: rules.string('旧密码'),
+                    string2: rules.string('新密码', undefined, 6), // 最短6位
+                    string3: rules.string('确认密码', 16, 6), // 6-16位
 
                     // 字母和数字
                     pass1: rules.letter_number('密码1'),
@@ -200,6 +255,7 @@ export default {
         }
     }
 }
+</script>
 ```
 
 ### TuNiao-UI
